@@ -1,10 +1,13 @@
+#Requires AutoHotkey v2.0-a 
+ #SingleInstance Force
+
 ; -------------------------------- hotstrings.ahk -------------------------------- 
 
 ::\maile::
 ::\mailr::[redacted-email]
-::\mailms::[redacted-email]; -------------------------------- launch_terminal.ahk -------------------------------- 
+::\mailms::[redacted-email]
+; -------------------------------- launch_terminal.ahk -------------------------------- 
 
-; -------------------------------------------- Run Terminal --------------------------------------------
 ; Run Windows Terminal with Ctrl+Alt+T (opens at current File Explorer path if focused)
 ^!t:: {
     ; Check if File Explorer is the active window
@@ -31,7 +34,7 @@ GetFileExplorerPath() {
     }
     return ""
 }
-; -------------------------------------------- WSL Ubuntu Launcher --------------------------------------------
+
 ; Launch WSL Ubuntu with Ctrl+Alt+U
 ^!u:: {
     ; Check if File Explorer is the active window
@@ -55,12 +58,13 @@ ConvertToWSLPath(windowsPath) {
     if (RegExMatch(windowsPath, "^([A-Za-z]):", &match)) {
         drive := StrLower(match[1])
         wslPath := "/mnt/" drive SubStr(windowsPath, 3)
-        ; Replace backslashes with forward slashes
+        
         wslPath := StrReplace(wslPath, "\", "/")
         return wslPath
     }
     return windowsPath
 }
+
 ; -------------------------------- navigation_mode.ahk -------------------------------- 
 
 SetCapsLockState "AlwaysOff"
@@ -149,9 +153,9 @@ ProcessRepeatBuffer() {
 }
 
 CapsLock:: {
-	SwitchMode("navigation")      ; Enter navigation mode immediately
-    KeyWait("CapsLock")          ; Wait until CapsLock is released
-    SwitchMode("normal")         ; Return to normal mode when released
+	SwitchMode("navigation")      
+    KeyWait("CapsLock")           
+    SwitchMode("normal")          
     return
 }
 
@@ -224,7 +228,7 @@ RepeatKey(key) {
 			ToolTip "du"
 			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
 		} else {
-			RepeatKey("^{Left}")  ; Normal u 
+			RepeatKey("^{Left}")  
 		}
 		return
 	}
@@ -239,7 +243,7 @@ RepeatKey(key) {
 			ToolTip "do"
 			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
 		} else {
-			RepeatKey("^{Right}")  ; Normal o
+			RepeatKey("^{Right}")  
 		}
 		return
 	}
@@ -254,7 +258,7 @@ RepeatKey(key) {
 			ToolTip "di"
 			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
 		} else {
-			RepeatKey("{Up}")  ; Normal i 
+			RepeatKey("{Up}")  
 		}
 		return
 	}
@@ -269,7 +273,7 @@ RepeatKey(key) {
 			ToolTip "dk"
 			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
 		} else {
-			RepeatKey("{Down}")  ; Normal k 
+			RepeatKey("{Down}")
 		}
 		return
 	}
@@ -284,7 +288,7 @@ RepeatKey(key) {
 			ToolTip "dj"
 			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
 		} else {
-			RepeatKey("{Left}")  ; Normal j 
+			RepeatKey("{Left}") 
 		}
 		return
 	}
@@ -343,7 +347,7 @@ RepeatKey(key) {
 			ToolTip "dy - not implemented"
 			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
 		} else {
-			RepeatKey("{PgUp}")  ; Normal y 
+			RepeatKey("{PgUp}")  
 		}
 		return
 	}
@@ -357,7 +361,7 @@ RepeatKey(key) {
 			ToolTip "dn - not implemented"
 			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
 		} else {
-			RepeatKey("{PgDn}")  ; Normal n 
+			RepeatKey("{PgDn}") 
 		}
 		return
 	}
@@ -513,6 +517,7 @@ SetRepeatCount(ThisHotkey) {
         SetTimer repeatTimer, -2000  ; 2 second timeout
     }
 }
+
 
 ; -------------------------------- potplayer_fastforward.ahk -------------------------------- 
 
