@@ -1,5 +1,5 @@
 #Requires AutoHotkey v2.0-a 
- #SingleInstance Force
+#SingleInstance Force
 
 ; -------------------------------- hotstrings.ahk -------------------------------- 
 

@@ -1,4 +1,4 @@
-#!/usr/bin/bash -i
+#!/usr/bin/bash
 
 OUTPUT="main.ahk"
 
@@ -18,7 +18,6 @@ read -p "Delete the backup for original ${OUTPUT}.old (Y/n): " confirm
 
 if [[ $confirm == [yY] ]]; then
     rm ${OUTPUT}.old 2> /dev/null
-    exit 0
 fi
 
 exit 0
