@@ -1,5 +1,6 @@
 #Requires AutoHotkey v2.0 
 #SingleInstance Force
+#Include ConfigMenu.ahk
 #Include hotstrings.ahk
 #Include launch_terminal.ahk
 #Include navigation_mode.ahk
