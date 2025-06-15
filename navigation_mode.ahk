@@ -9,6 +9,27 @@ global waitingForSecondD := false  ; State for d leader key
 global repeatBuffer := ""  ; Buffer to build multi-digit repeat counts
 global repeatTimer := 0    ; Timer handle for repeat count timeout
 
+IsEditorProgram() {
+    ; Get the active window's process name
+    try {
+        activeProcess := WinGetProcessName("A")
+        
+        ; List of programs that support Ctrl+L for delete line
+		; Can check the program name using window spy
+        ctrlLPrograms := [
+            "Code.exe",           ; VS Code
+            "devenv.exe",         ; Visual Studio    
+        ]
+        
+        for program in ctrlLPrograms {
+            if (activeProcess = program) {
+                return true
+            }
+        }
+    }
+    return false
+}
+
 SwitchMode(mode := "")
 {
 	global normalMode, repeatCount, repeatBuffer
@@ -32,8 +53,6 @@ SwitchMode(mode := "")
 	}
 	
     ; Show ToolTip to indicate current mode
-	ToolTip (normalMode ? "": "Navigation Mode") 
-
 	; Reset repeat count and buffer when switching modes
 	if (mode == "normal") {
 		repeatCount := 1
@@ -59,7 +78,7 @@ ResetRepeatBuffer() {
 	repeatCount := 1
 
 	; Show ToolTip to indicate current mode
-	ToolTip (normalMode ? "": "Navigation Mode") 
+	ToolTip (normalMode ? "": "NAV") 
 }
 
 ; Process the accumulated repeat buffer
@@ -99,7 +118,7 @@ ResetDState() {
     if (waitingForSecondD) {
         waitingForSecondD := false
         ToolTip "d timeout"
-        SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
+        SetTimer () => ToolTip(normalMode ? "": "NAV") , -1000	
     }
 }
 
@@ -114,7 +133,7 @@ RepeatKey(key) {
         ToolTip "Executing " repeatCount
         ; SetTimer () => ToolTip(), -800  ; Clear after 0.8 seconds
         ; Show ToolTip to indicate current mode
-		ToolTip (normalMode ? "": "Navigation Mode") 
+		ToolTip (normalMode ? "": "NAV") 
     }
     
     buf := ""
@@ -132,17 +151,22 @@ RepeatKey(key) {
 		Send("{Esc}")
 		return
 	}
-
+	
 	; Delete functions
 	d::{
 		global waitingForSecondD
 		ProcessRepeatBuffer()  ; Process any pending repeat count
 		
 		if (waitingForSecondD) {  ; Had pressed d
+			; dd: Delete entire line
 			waitingForSecondD := false
-			RepeatKey("{Home}+{End}{Delete}")  ; dd: Delete entire line
+			if (IsEditorProgram()) {
+				RepeatKey("^l")
+			} else {
+				RepeatKey("{Home}+{End}{Delete}")  
+			}
 			ToolTip "dd"
-			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
+			SetTimer () => ToolTip(normalMode ? "": "NAV") , -1000	
 		} else {
 			; First d pressed - wait for second key
 			waitingForSecondD := true
@@ -160,7 +184,7 @@ RepeatKey(key) {
 			waitingForSecondD := false
 			RepeatKey("^{Backspace}")  ; du: Delete word before
 			ToolTip "du"
-			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
+			SetTimer () => ToolTip(normalMode ? "": "NAV") , -1000	
 		} else {
 			RepeatKey("^{Left}")  
 		}
@@ -175,7 +199,7 @@ RepeatKey(key) {
 			waitingForSecondD := false
 			RepeatKey("^{Delete}")  ; do: Delete word after
 			ToolTip "do"
-			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
+			SetTimer () => ToolTip(normalMode ? "": "NAV") , -1000	
 		} else {
 			RepeatKey("^{Right}")  
 		}
@@ -190,7 +214,7 @@ RepeatKey(key) {
 			waitingForSecondD := false
 			RepeatKey("+{Up}{Delete}")  ; di: Delete to previous line
 			ToolTip "di"
-			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
+			SetTimer () => ToolTip(normalMode ? "": "NAV") , -1000	
 		} else {
 			RepeatKey("{Up}")  
 		}
@@ -205,7 +229,7 @@ RepeatKey(key) {
 			waitingForSecondD := false
 			RepeatKey("+{Down}{Delete}")  ; dk: Delete to next line
 			ToolTip "dk"
-			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
+			SetTimer () => ToolTip(normalMode ? "": "NAV") , -1000	
 		} else {
 			RepeatKey("{Down}")
 		}
@@ -220,7 +244,7 @@ RepeatKey(key) {
 			waitingForSecondD := false
 			RepeatKey("+{Left}{Delete}")  ; dj: Delete character before
 			ToolTip "dj"
-			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
+			SetTimer () => ToolTip(normalMode ? "": "NAV") , -1000	
 		} else {
 			RepeatKey("{Left}") 
 		}
@@ -235,7 +259,7 @@ RepeatKey(key) {
 			waitingForSecondD := false
 			RepeatKey("{Delete}")  ; dl: Delete character after
 			ToolTip "dl"
-			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
+			SetTimer () => ToolTip(normalMode ? "": "NAV") , -1000	
 		} else {
 			RepeatKey("{Right}")  ; Normal l
 		}
@@ -250,7 +274,7 @@ RepeatKey(key) {
 			waitingForSecondD := false
 			RepeatKey("+{Home}{Delete}")  ; dh: Delete to start of line
 			ToolTip "dh"
-			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
+			SetTimer () => ToolTip(normalMode ? "": "NAV") , -1000	
 		} else {
 			RepeatKey("{Home}")  ; Normal h 
 		}
@@ -265,7 +289,7 @@ RepeatKey(key) {
 			waitingForSecondD := false
 			RepeatKey("+{End}{Delete}")  ; d;: Delete to end of line
 			ToolTip "d;"
-			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
+			SetTimer () => ToolTip(normalMode ? "": "NAV") , -1000	
 		} else {
 			RepeatKey("{End}")  
 		}
@@ -279,7 +303,7 @@ RepeatKey(key) {
 		if (waitingForSecondD) {
 			waitingForSecondD := false
 			ToolTip "dy - not implemented"
-			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
+			SetTimer () => ToolTip(normalMode ? "": "NAV") , -1000	
 		} else {
 			RepeatKey("{PgUp}")  
 		}
@@ -293,7 +317,7 @@ RepeatKey(key) {
 		if (waitingForSecondD) {
 			waitingForSecondD := false
 			ToolTip "dn - not implemented"
-			SetTimer () => ToolTip(normalMode ? "": "Navigation Mode") , -1000	
+			SetTimer () => ToolTip(normalMode ? "": "NAV") , -1000	
 		} else {
 			RepeatKey("{PgDn}") 
 		}
