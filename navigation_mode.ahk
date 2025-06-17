@@ -17,8 +17,9 @@ IsEditorProgram() {
         ; List of programs that support Ctrl+L for delete line
 		; Can check the program name using window spy
         ctrlLPrograms := [
-            "Code.exe",           ; VS Code
-            "devenv.exe",         ; Visual Studio    
+            "Code.exe",           
+            "devenv.exe",         
+			"clion64.exe"    	
         ]
         
         for program in ctrlLPrograms {
@@ -53,6 +54,8 @@ SwitchMode(mode := "")
 	}
 	
     ; Show ToolTip to indicate current mode
+	ToolTip (normalMode ? "": "NAV") 
+
 	; Reset repeat count and buffer when switching modes
 	if (mode == "normal") {
 		repeatCount := 1
@@ -144,7 +147,7 @@ RepeatKey(key) {
     repeatCount := 1
 }
 
-; Navigation mappings in navigation mode
+; Navigation mappings in NAV
 #HotIf !normalMode
 	Esc::{
 		SwitchMode("normal")
