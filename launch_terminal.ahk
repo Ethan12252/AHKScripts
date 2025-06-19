@@ -30,6 +30,8 @@ GetFileExplorerPath() {
 
 ; Launch WSL Ubuntu with Ctrl+Alt+U
 ^!u:: {
+    ; Get the wsl config name from the ini file
+    wslConfigName := IniRead(".\config.ini", "LaunchTerminal", "WslProfileName")
     ; Check if File Explorer is the active window
     if WinActive("ahk_class CabinetWClass") || WinActive("ahk_class ExploreWClass") {
         ; Get the current path from File Explorer
@@ -37,12 +39,13 @@ GetFileExplorerPath() {
         if (currentPath != "") {
             ; Convert Windows path to WSL path
             wslPath := ConvertToWSLPath(currentPath)
-            Run 'wt.exe wsl -d Ubuntu-20.04 --cd "' wslPath '"'
+            Run "wt.exe -p `"" . wslConfigName . "`" -d `"" . wslPath . "`""
             return
         }
     }
     ; Run WSL Ubuntu normally
-    Run "wt.exe wsl -d Ubuntu-24.04"
+    Run "wt.exe -p `"" . wslConfigName . "`""
+
 }
 
 ; Convert Windows path to unix path
