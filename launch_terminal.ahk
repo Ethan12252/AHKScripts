@@ -60,3 +60,19 @@ ConvertToWSLPath(windowsPath) {
     }
     return windowsPath
 }
+
+; Run vscode with Ctrl+Alt+Y (opens at current File Explorer path if focused)
+^!y:: {
+    ; Check if File Explorer is the active window
+    if WinActive("ahk_class CabinetWClass") || WinActive("ahk_class ExploreWClass") {
+        ; Get the current path from File Explorer
+        ; Get path from address bar
+        currentPath := GetFileExplorerPath()
+        if (currentPath != "") {
+            Run "cmd /c code `"" . currentPath . "`""
+            return
+        }
+    }
+    ; Run normally
+    Run "cmd /c code"
+}
