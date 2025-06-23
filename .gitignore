@@ -54,3 +54,6 @@ Temporary Items
 
 .swp
 *.old
+
+# local config
+config.ini
