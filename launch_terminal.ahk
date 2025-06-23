@@ -69,7 +69,8 @@ ConvertToWSLPath(windowsPath) {
         ; Get path from address bar
         currentPath := GetFileExplorerPath()
         if (currentPath != "") {
-            Run "cmd /c code `"" . currentPath . "`""
+            ; Run "cmd /c code `"" . currentPath . "`""
+            Run 'cmd /c start /B code "' . currentPath . '"',, "Hide"
             return
         }
     }
