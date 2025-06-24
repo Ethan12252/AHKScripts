@@ -32,7 +32,7 @@ ShowSettings(*) {
             newResetSpeed >= 0.5 && newResetSpeed <= 2.0) {
             FastSpeed := newFastSpeed
             ResetSpeed := newResetSpeed
-            ToolTip("設定已保存! FastForward:" . FastSpeed . "x, Reset:" . ResetSpeed . "x")
+            ToolTip("暫時設定以保存 FastForward:" . FastSpeed . "x, Reset:" . ResetSpeed . "x")
             SetTimer(() => ToolTip(""), -2000)
             SettingsGui.Destroy()
         } else {

@@ -112,6 +112,7 @@ ConvertToWSLPath(windowsPath) {
 PositionTerminalWindow() {
     WinWait("ahk_exe WindowsTerminal.exe", , 3)
     ; For my laptop 1920x1200 screen: x=300, y=100, width=1320, height=900 (slightly bigger)
-    WinMove(300, 100, 1320, 900, "ahk_exe WindowsTerminal.exe")
+    ; TODO: Add device check
+    WinMove(200, 100, 1620, 1000, "ahk_exe WindowsTerminal.exe")
     ; MsgBox "Repos fin", "dbg", 'OK'
 }

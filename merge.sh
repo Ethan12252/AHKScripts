@@ -24,6 +24,9 @@ merge() {
 
 generate_config() {
     cat > config.ini <<EOF
+[global]
+device="msi_laptop"
+
 [LaunchTerminal]
 WslProfileName="Ubuntu 20.04 (WSL)"
 
