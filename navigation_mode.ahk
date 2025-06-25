@@ -1,7 +1,7 @@
 ﻿#Requires AutoHotkey v2.0-a
 #SingleInstance Force
 
-SetCapsLockState "AlwaysOff"
+; SetCapsLockState "AlwaysOff"
 
 global normalMode := true  
 global repeatCount := 1    
