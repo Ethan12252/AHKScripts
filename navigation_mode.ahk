@@ -1,8 +1,6 @@
 ﻿#Requires AutoHotkey v2.0-a
 #SingleInstance Force
 
-; SetCapsLockState "AlwaysOff"
-
 global normalMode := true  
 global repeatCount := 1    
 global waitingForSecondD := false  ; State for d leader key
@@ -114,6 +112,9 @@ CapsLock:: {
     SwitchMode("normal")          
     return
 }
+
+^CapsLock:: return
++CapsLock:: return
 
 ; Reset d state on timeout
 ResetDState() {
