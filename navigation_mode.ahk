@@ -8,7 +8,7 @@ global waitingForSecondD := false
 global repeatBuffer := ""
 global repeatTimer := 0
 
-; ===== CONFIGURATION =====
+; ===== CONFIG =====
 global CONFIG := {
     REPEAT_TIMEOUT: 2000,
     D_COMMAND_TIMEOUT: 800,
@@ -158,7 +158,7 @@ HandleDCommand(secondKey, action, actionName) {
         RepeatKey(action)
         ShowCommandTooltip(actionName, CONFIG.TOOLTIP_DELAY)
     } else {
-        ; Return false to indicate this should be handled as a normal key
+        ; Should be handled as a normal key
         return false
     }
     return true
@@ -282,8 +282,8 @@ CapsLock:: {
     }
 
     ; === BASIC COMMANDS ===
-    r::RepeatKey("^z")      ; Undo
-    +r::RepeatKey("^y")     ; Redo
+    z::RepeatKey("^z")      ; Undo
+    +z::RepeatKey("^y")     ; Redo
     x::RepeatKey("^x")      ; Cut
     c::RepeatKey("^c")      ; Copy
     v::RepeatKey("^v")      ; Paste
