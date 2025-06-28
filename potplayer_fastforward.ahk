@@ -2,16 +2,19 @@
 #SingleInstance Force
 
 ; Default speed
-global FastSpeed := 3.0
-global ResetSpeed := 1
+global FastSpeed := ""
+global ResetSpeed := ""
 
 #HotIf WinActive("ahk_class PotPlayer64 ahk_exe PotPlayerMini64.exe")
 
 Right::     ; 模仿Bilibili長按快進功能
 {
-    try {
-        global FastSpeed := IniRead(".\config.ini", "PotPlayerFastFoward", "FastSpeed")
-        global ResetSpeed := IniRead(".\config.ini", "PotPlayerFastFoward", "ResetSpeed")
+    global FastSpeed, ResetSpeed
+    if(FastSpeed == "" or ResetSpeed == "") {
+        ; try {
+            global FastSpeed := IniRead(".\config.ini", "PotPlayerFastFoward", "FastSpeed")
+            global ResetSpeed := IniRead(".\config.ini", "PotPlayerFastFoward", "ResetSpeed")
+        ; }
     }
 
     if !(KeyWait("Right", "T0.3")) {

@@ -22,8 +22,6 @@ ShowSettings(*) {
     SettingsGui.Add("Button", "xm y+20 w80", "確定").OnEvent("Click", SaveSettings_cb)
     SettingsGui.Add("Button", "x+10 w80", "取消").OnEvent("Click", (*) => SettingsGui.Destroy())
 
-
-    
     SaveSettings_cb(*) {
         newFastSpeed := Float(FastEdit.Text)
         newResetSpeed := Float(ResetEdit.Text)
