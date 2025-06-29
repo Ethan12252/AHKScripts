@@ -5,7 +5,8 @@
 global FastSpeed := ""
 global ResetSpeed := ""
 
-#HotIf WinActive("ahk_class PotPlayer64 ahk_exe PotPlayerMini64.exe")
+
+#HotIf WinActive("ahk_class PotPlayer64 ahk_exe PotPlayerMini64.exe") or WinActive("ahk_class MPC-BE ahk_exe mpc-be64.exe")
 
 Right::     ; 模仿Bilibili長按快進功能
 {
