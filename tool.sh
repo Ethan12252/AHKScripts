@@ -51,7 +51,7 @@ elif [[ $1 == "startup" ]]; then
 elif [[ $1 == "genconfig" ]]; then
     generate_config
 elif [[ $1 == "compiler" ]]; then
-    /c/Users/ethbr/AppData/Local/Programs/AutoHotkey/Compiler/Ahk2Exe.exe
+    $LOCALAPPDATA/Programs/AutoHotkey/Compiler/Ahk2Exe.exe
 else
     echo "Parameter error"
 fi
