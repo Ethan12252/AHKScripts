@@ -38,10 +38,11 @@ EOF
 }
 
 if [[ $1 == "-h" || $1 == "--help" ]]; then
-    echo "Usage: $0 [merge|startup|genconfig]"
+    echo "Usage: $0 [merge|startup|genconfig|compiler]"
     echo "  merge     : Merge all .ahk files into main.ahk (default)"
     echo "  startup   : Add main.ahk to startup via shortcut"
     echo "  genconfig : Generate config.ini template"
+    echo "  compiler  : Launch Ahk2exe"
 elif [[ $# -eq 0 || $1 == "merge" ]]; then
     merge
 elif [[ $1 == "startup" ]]; then
@@ -49,6 +50,10 @@ elif [[ $1 == "startup" ]]; then
     echo "Added a shortcut to the startup folder"
 elif [[ $1 == "genconfig" ]]; then
     generate_config
+elif [[ $1 == "compiler" ]]; then
+    /c/Users/ethbr/AppData/Local/Programs/AutoHotkey/Compiler/Ahk2Exe.exe
+else
+    echo "Parameter error"
 fi
 
 exit 0
