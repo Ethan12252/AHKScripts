@@ -37,13 +37,13 @@ EOF
     echo "config.ini template generated."
 }
 
-if [[ $1 == "-h" || $1 == "--help" ]]; then
+if [[ $# -eq 0 || $1 == "-h" || $1 == "--help" ]]; then
     echo "Usage: $0 [merge|startup|genconfig|compiler]"
     echo "  merge     : Merge all .ahk files into main.ahk (default)"
     echo "  startup   : Add main.ahk to startup via shortcut"
     echo "  genconfig : Generate config.ini template"
     echo "  compiler  : Launch Ahk2exe"
-elif [[ $# -eq 0 || $1 == "merge" ]]; then
+elif [[ $1 == "merge" ]]; then
     merge
 elif [[ $1 == "startup" ]]; then
     powershell.exe ./create_shortcut.ps1 './main.ahk'
