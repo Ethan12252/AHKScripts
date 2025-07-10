@@ -59,3 +59,17 @@ SetSpeed(targetSpeed) {
     }
     Sleep(50)
 }
+
+; Screenshoot and send using localsend 
+#HotIf WinActive("ahk_class MPC-BE ahk_exe mpc-be64.exe")
+!i::{
+    global explorerPID, localSendPID
+    global sendFinished := false
+    Send("!i")
+    Sleep(500)
+    Send("{Enter}")
+    
+    Run("explorer.exe C:\Users\ethbr\Pictures")
+    Run("C:\Users\ethbr\AppData\Local\Programs\LocalSend\localsend_app.exe")
+}
+#HotIf

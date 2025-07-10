@@ -4,6 +4,7 @@ param(
     [string]$DestinationFolder = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
 )
 
+# Help message
 if (-not $TargetPath) {
     Write-Host "Usage: .\create_shortcut.ps1 <TargetPath> <DestinationFolder>" 
     Write-Host "Example:"
