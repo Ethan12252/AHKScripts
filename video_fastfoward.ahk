@@ -6,7 +6,8 @@ global FastSpeed := ""
 global ResetSpeed := ""
 
 
-#HotIf WinActive("ahk_class PotPlayer64 ahk_exe PotPlayerMini64.exe") or WinActive("ahk_class MPC-BE ahk_exe mpc-be64.exe")
+; #HotIf WinActive("ahk_class PotPlayer64 ahk_exe PotPlayerMini64.exe") or WinActive("ahk_class MPC-BE ahk_exe mpc-be64.exe")
+#HotIf WinActive("ahk_class PotPlayer64 ahk_exe PotPlayerMini64.exe") or  WinActive("ahk_class MediaPlayerClassicW ahk_exe mpc-hc64.exe")
 
 Right::     ; 模仿Bilibili長按快進功能
 {
@@ -61,15 +62,21 @@ SetSpeed(targetSpeed) {
 }
 
 ; Screenshoot and send using localsend 
-#HotIf WinActive("ahk_class MPC-BE ahk_exe mpc-be64.exe")
-!i::{
-    global explorerPID, localSendPID
-    global sendFinished := false
+#HotIf WinActive("ahk_class MediaPlayerClassicW ahk_exe mpc-hc64.exe")
+; #HotIf WinActive("ahk_class MPC-BE ahk_exe mpc-be64.exe")
+
+^!i::{
     Send("!i")
     Sleep(500)
     Send("{Enter}")
     
     Run("explorer.exe C:\Users\ethbr\Pictures")
     Run("C:\Users\ethbr\AppData\Local\Programs\LocalSend\localsend_app.exe")
+}
+
+!i::{
+    Send("!i")
+    Sleep(300)
+    Send("{Enter}")
 }
 #HotIf
