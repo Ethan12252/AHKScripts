@@ -1,4 +1,4 @@
-﻿#Requires AutoHotkey v2.0-a
+﻿#Requires AutoHotkey v2.0
 #SingleInstance Force
 
 ; ===== GLOBAL VARIABLES =====
@@ -7,6 +7,7 @@ global repeatCount := 1
 global waitingForSecondD := false
 global repeatBuffer := ""
 global repeatTimer := 0
+global waitingForReplace := false
 
 ; ===== CONFIG =====
 global CONFIG := {
@@ -54,7 +55,7 @@ ShowModeTooltip() {
     if (repeatBuffer != "") {
         ToolTip "Repeat: " repeatBuffer
     } else {
-        ToolTip (normalMode ? "" : "NAV")
+        ToolTip (normalMode ? "" : "↔")
     }
 }
 
@@ -87,7 +88,6 @@ SwitchMode(mode := "") {
     iconPath := normalMode ? CONFIG.ICONS.NORMAL : CONFIG.ICONS.NAV
     TraySetIcon(iconPath)
     
-    ; Show mode tooltip
     ShowModeTooltip()
     
     ; Reset state when switching to normal mode
@@ -279,6 +279,24 @@ CapsLock:: {
             RepeatKey("{PgDn}")
         }
         return
+    }
+    
+    ; === NAVIGATION KEYS WITH R COMMAND ===
+    
+    r:: {
+    global waitingForReplace
+    
+    if (waitingForReplace) {
+        return
+    }
+    
+    waitingForReplace := true
+    
+    ; Select current character
+    Send "+{Right}"
+    ShowCommandTooltip("r")
+    waitingForReplace := false
+    return
     }
 
     ; === BASIC COMMANDS ===
