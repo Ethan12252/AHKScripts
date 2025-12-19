@@ -6,3 +6,5 @@
 #Include mouse_gesture.ahk
 #Include navigation_mode.ahk
 #Include video_fastfoward.ahk
+#Include "chinese_text_toggle.ahk"
+
