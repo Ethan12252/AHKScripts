@@ -43,10 +43,10 @@ Modal editing mode activated by holding **CapsLock**. Once activated, use letter
 
 ### **hotstrings.ahk**
 Text expansion shortcuts:
-- `\maile` → 
-- `\mailr` → [redacted-email]
-- `\mailms` → [redacted-email]
-- `\name` → [redacted-name]
+- `\maile`  → your@email1.here
+- `\mailr`  → your@email2.here
+- `\mailms` → your@email3.here
+- `\name` → Your Name Here
 
 ### **launch_terminal.ahk**
 Quick terminal/editor launcher with path awareness:
@@ -81,7 +81,7 @@ Settings GUI for video fastforward speeds:
 - Accessible from tray menu
 
 ## Requirements
-- AutoHotkey v2.0 or newer
+- AutoHotkey v2.0 or newer [Download Here](https://www.autohotkey.com/)
 
 ## Build & Setup
 
