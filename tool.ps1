@@ -1,16 +1,16 @@
 #Requires -Version 5.0
 
 param(
-    [string]$Command = "merge"
+    [string]$Command = ""
 )
 
 function Merge-AhkFiles {
     $output = "main.ahk"
     $backup = "$output.old"
     
-    # Backup existing main.ahk
+    # Backup existing main.ahk by moving it
     if (Test-Path $output) {
-        Copy-Item $output $backup -Force
+        Move-Item $output $backup -Force -ErrorAction SilentlyContinue
     }
     
     # Create new main.ahk with header
@@ -30,10 +30,12 @@ function Merge-AhkFiles {
     
     # Ask to delete backup
     $confirm = Read-Host "Delete the backup for original $backup (Y/n)"
-    if ($confirm -eq "" -or $confirm -eq "Y" -or $confirm -eq "y") {
+    if ($confirm -match "^[yY]$") {
         Remove-Item $backup -ErrorAction SilentlyContinue
         Write-Host "Backup deleted."
     }
+    
+    exit 0
 }
 
 function Generate-Config {
@@ -88,6 +90,11 @@ Commands:
 }
 
 # Execute command
+if ([string]::IsNullOrEmpty($Command) -or $Command -eq "-h" -or $Command -eq "--help") {
+    Show-Help
+    exit 0
+}
+
 switch ($Command) {
     "merge" {
         Merge-AhkFiles
@@ -105,7 +112,7 @@ switch ($Command) {
         Show-Help
     }
     default {
-        Write-Host "Unknown command: $Command"
-        Show-Help
+        Write-Host "Parameter error"
+        exit 1
     }
 }

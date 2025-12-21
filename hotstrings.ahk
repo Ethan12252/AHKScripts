@@ -1,10 +1,10 @@
 #Requires AutoHotkey v2.0-a
 #SingleInstance Force
 
-IniRead mailE, config.ini, Email, personal
-IniRead mailR, config.ini, Email, work
-IniRead mailMS, config.ini, Email, school
-IniRead nameData, config.ini, Name, fullname
+mailE := IniRead("config.ini", "Email", "personal")
+mailR := IniRead("config.ini", "Email", "work")
+mailMS := IniRead("config.ini", "Email", "school")
+nameData := IniRead("config.ini", "Name", "fullname")
 
 ; Email
 ::\maile::%mailE%

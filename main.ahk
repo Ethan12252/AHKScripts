@@ -1,10 +1,9 @@
 #Requires AutoHotkey v2.0 
 #SingleInstance Force
+#Include chinese_text_toggle.ahk
 #Include ConfigMenu.ahk
 #Include hotstrings.ahk
 #Include launch_terminal.ahk
 #Include mouse_gesture.ahk
 #Include navigation_mode.ahk
 #Include video_fastfoward.ahk
-#Include "chinese_text_toggle.ahk"
-
