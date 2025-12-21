@@ -1,17 +1,27 @@
 #Requires AutoHotkey v2.0-a
 #SingleInstance Force
 
-mailE := IniRead("config.ini", "Email", "personal")
-mailR := IniRead("config.ini", "Email", "work")
-mailMS := IniRead("config.ini", "Email", "school")
-nameData := IniRead("config.ini", "Name", "fullname")
+mailE := Trim(IniRead("config.ini", "Email", "personal"))
+mailR := Trim(IniRead("config.ini", "Email", "work"))
+mailMS := Trim(IniRead("config.ini", "Email", "school"))
+
+; Read name with proper UTF-8 handling
+FileObj := FileOpen("config.ini", "r", "UTF-8")
+content := FileObj.Read()
+FileObj.Close()
+
+nameData := ""
+loop Parse content, "`n", "`r" {
+    if (A_LoopField ~= "^\s*fullname\s*=") {
+        nameData := Trim(SubStr(A_LoopField, InStr(A_LoopField, "=") + 1))
+        break
+    }
+}
 
 ; Email
-::\maile::%mailE%
-::\mailr::%mailR%
-::\mailms::%mailMS%
+Hotstring("::\maile", mailE)
+Hotstring("::\mailr", mailR)
+Hotstring("::\mailms", mailMS)
 
 ; Name
-::\name::%nameData%
-
-
+Hotstring("::\name", nameData)

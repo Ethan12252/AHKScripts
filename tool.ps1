@@ -58,8 +58,8 @@ WslProfileName="Ubuntu 20.04 (WSL)"
 FastSpeed=3.0
 ResetSpeed=1.0
 "@
-    Set-Content "config.ini" $config
-    Write-Host "config.ini template generated."
+    Set-Content "config.ini" $config -Encoding UTF8
+    Write-Host "config.ini template generated as UTF-8."
 }
 
 function Add-Startup {
