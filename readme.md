@@ -1,95 +1,113 @@
-# Readme
+# AHK Scripts
 
-### 1. Navigation Modes
+A collection of AutoHotkey v2.0 scripts I use.
 
-| Mode            | Description             | Indicator             | Toggle           |
-| --------------- | ----------------------- | --------------------- | ---------------- |
-| **Insert Mode** | Normal typing (default) | "Insert Mode" tooltip | Hold CapsLock    |
-| **Normal Mode** | Navigation and commands | "Normal Mode" tooltip | Release CapsLock |
+## Scripts Overview
 
-### 2. CapsLock Management
+### **main.ahk**
+Entry point that loads all other modules.
 
-| Key Combination       | Function                          |
-| --------------------- | --------------------------------- |
-| `CapsLock`            | Toggle between Insert/Normal mode |
-| `Ctrl+Shift+CapsLock` | Manual CapsLock on/off            |
+### **navigation_mode.ahk**
+Modal editing mode activated by holding **CapsLock**. Once activated, use letter keys for navigation and editing instead of arrow keys.
 
-### 3. Navigation Keys (Normal Mode Only)
+**Quick Start:**
+- Hold **CapsLock** to enter navigation mode (tray icon changes to red)
+- Use ijkl and semicolon (;) for movement
+- Type a number before a command to repeat it (e.g., `5j` = move down 5 times)
+- Release **CapsLock** to exit back to normal mode
 
-| Key | Basic Movement    |
-| --- | ----------------- |
-| `i` | Up arrow          |
-| `k` | Down arrow        |
-| `j` | Left arrow        |
-| `l` | Right arrow       |
-| `u` | Word left         |
-| `o` | Word right        |
-| `h` | Home (line start) |
-| `;` | End (line end)    |
-| `y` | Page Up           |
-| `n` | Page Down         |
+**Movement Layout:**
+```
+                    ↑  
+     ←(word) ┌───┐┌───┐┌───┐ →(word)
+             │ u ││ i ││ o │
+             └───┘└───┘└───┘
+   Home ┌───┐┌───┐┌───┐┌───┐┌───┐ End
+        │ h ││ j ││ k ││ l ││ ; │
+        └───┘└───┘└───┘└───┘└───┘
+               ←    ↓    →
+```
+- **h** = Line start  
+- **;** = Line end
+- **y** / **n**: Page up/Page down
 
-*Note: Ctrl+Shift, Ctrl+Alt, and Ctrl+Shift+Alt combinations are also supported*
+**Editing Commands:**
 
-### 4. Normal Mode Commands
+| Command | Action |
+|---------|--------|
+| **d** + movement key | Delete (e.g., `dj` = delete left, `di` = delete up) |
+| **dd** | Delete entire line |
+| **r** | Replace character |
+| **x** / **c** / **v** | Cut / Copy / Paste |
+| **z** / **Shift+z** | Undo / Redo |
 
-| Command | Action               | Description                |
-| ------- | -------------------- | -------------------------- |
-| `dj`    | Delete char before   | Backspace                  |
-| `dl`    | Delete char after    | Delete key                 |
-| `du`    | Delete word before   | Ctrl+Backspace             |
-| `do`    | Delete word after    | Ctrl+Delete                |
-| `dd`    | Delete entire line   | Select whole line + Delete |
-| `dh`    | Delete to line start | Select to Home + Delete    |
-| `d;`    | Delete to line end   | Select to End + Delete     |
-| `di`    | Delete to prev line  | Select up + Delete         |
-| `dk`    | Delete to next line  | Select down + Delete       |
-| `x`     | Cut                  | Ctrl+X                     |
-| `c`     | Copy                 | Ctrl+C                     |
-| `v`     | Paste                | Ctrl+V                     |
+### **hotstrings.ahk**
+Text expansion shortcuts:
+- `\maile` → 
+- `\mailr` → [redacted-email]
+- `\mailms` → [redacted-email]
+- `\name` → [redacted-name]
 
-*Press `d` then the second key within 0.6 seconds for delete commands*
+### **launch_terminal.ahk**
+Quick terminal/editor launcher with path awareness:
+- **Ctrl+Alt+T**: Windows Terminal (MSYS2)
+- **Ctrl+Alt+P**: Windows PowerShell
+- **Ctrl+Alt+U**: WSL profile (configured in config.ini)
+- **Ctrl+Alt+Y**: VS Code
+- Auto-opens at current File Explorer path when available
 
-### 5. Undo/Redo & Repeat
+### **chinese_text_toggle.ahk**
+Text conversion utility:
+- **Ctrl+Alt+F**: Copy selected text, convert between Simplified/Traditional Chinese, and paste back
+- Toggles between modes with each invocation
 
-| Key       | Function         | Notes                        |
-| --------- | ---------------- | ---------------------------- |
-| `r`       | Undo             | Ctrl+Z                       |
-| `Shift+r` | Redo             | Ctrl+Y                       |
-| `1-9`     | Set repeat count | Next command repeats N times |
+### **mouse_gesture.ahk**
+Right-click mouse gestures:
+- Drag right → Alt+Left (back in browser)
+- Drag left → Alt+Right (forward in browser)
+- Small movement → Normal right-click
 
-### 6. Quick Reference
+### **video_fastfoward.ahk**
+Media player speed control (PotPlayer, MPC-BE, MPC-HC):
+- Right arrow (long press): Speed up (Bilibili-style)
+- Right arrow (short press): Normal seek
+- Speed settings configurable via tray menu GUI or config.ini
+- Screen capture and LocalSend integration
 
-| What you want to do       | Key combination |
-| ------------------------- | --------------- |
-| Move cursor up 3 times    | `3` then `i`    |
-| Delete entire line        | `dd`            |
-| Select word to the right  | `Shift+o`       |
-| Delete word before cursor | `du`            |
-| Go to start of document   | `Ctrl+h`        |
-| Cut selected text         | `x`             |
-| Copy selected text        | `c`             |
-| Paste clipboard content   | `v`             |
-| Switch to typing mode     | `CapsLock`      |
+### **ConfigMenu.ahk**
+Settings GUI for video fastforward speeds:
+- Configure FastForward speed (1.0-5.0x)
+- Configure Reset speed (0.5-2.0x)
+- Accessible from tray menu
 
-### 7. Additional Shortcuts
+## Requirements
+- AutoHotkey v2.0 or newer
 
-| Shortcut              | Function              | Notes                                              |
-| --------------------- | --------------------- | -------------------------------------------------- |
-| `Ctrl+Alt+T`          | Open Windows Terminal | Opens in current folder if File Explorer is active |
-| `\maile`              | Email shortcut        | Expands to ``                    |
-| `\mailr`              | Email shortcut        | Expands to `[redacted-email]`                     |
-| `Ctrl+Shift+CapsLock` | Toggle CapsLock       | Manual CapsLock control                            |
+## Build & Setup
 
-### 8. PotPlayer Enhancement
+Use the build tools to automate common tasks:
 
-| Action                  | Trigger           | Result                                 |
-| ----------------------- | ----------------- | -------------------------------------- |
-| Long-press Right Arrow  | Hold >0.3 seconds | 3x speed playback with ">>>" indicator |
-| Short-press Right Arrow | Quick press       | Normal seek forward                    |
-| Release key             | After long-press  | Return to normal speed                 |
+**PowerShell:**
+```powershell
+.\tool.ps1 merge        # Merge all .ahk files into main.ahk
+.\tool.ps1 startup      # Add main.ahk to Windows startup
+.\tool.ps1 genconfig    # Generate config.ini template
+.\tool.ps1 compiler     # Launch Ahk2exe compiler
+```
 
-## Tips
+**Bash:**
+```bash
+./tool.sh merge        # Merge all .ahk files into main.ahk
+./tool.sh startup      # Add main.ahk to Windows startup
+./tool.sh genconfig    # Generate config.ini template
+./tool.sh compiler     # Launch Ahk2exe compiler
+```
 
-- In Windows, to run on startup, create a link to %APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup (for current user startup list)
-- When the tray icon is red we are in the normal mode, green insert mode.
+## Configuration
+Settings are read from `config.ini`:
+- WSL profile name for `launch_terminal.ahk`
+- Video playback speeds for `video_fastfoward.ahk`
+
+## Assets
+- `res/ahk_normal.icon` - Normal mode tray icon
+- `res/ahk_red.icon` - Navigation mode tray icon
