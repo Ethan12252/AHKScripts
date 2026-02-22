@@ -2,10 +2,11 @@
 #SingleInstance Force
 
 /*
-    - Ctrl+Alt+T: Open msys2 
+    - Ctrl+Alt+T: Open default shell
     - Ctrl+Alt+P: Open PowerShell  
     - Ctrl+Alt+U: Open WSL profile 
     - Ctrl+Alt+Y: Open VS Code
+    - Ctrl+Alt+G: Open SourceGit
     - Will open at the File Explorer if focused.
     
     - WSL profile name is read from config.ini
@@ -20,13 +21,11 @@
         currentPath := GetFileExplorerPath()
         if (currentPath != "") {
             Run 'wt.exe -d "' currentPath '"'
-            PositionTerminalWindow()
             return
         }
     }
     ; Run normally
     Run "wt.exe"
-    PositionTerminalWindow()
 }
 
 ; Run Windows Terminal powershell with Ctrl+Alt+P (opens at current File Explorer path if focused)
@@ -38,13 +37,11 @@
         currentPath := GetFileExplorerPath()
         if (currentPath != "") {
             Run "wt.exe -p `"" . "Windows PowerShell" . "`" -d `"" . currentPath . "`""
-            PositionTerminalWindow()
             return
         }
     }
     ; Run normally
     Run "wt.exe -p `"" . "Windows PowerShell" . "`""
-    PositionTerminalWindow()
 }
 
 GetFileExplorerPath() {
@@ -70,13 +67,11 @@ GetFileExplorerPath() {
             ; Convert Windows path to WSL path
             wslPath := ConvertToWSLPath(currentPath)
             Run "wt.exe -p `"" . wslConfigName . "`" -d `"" . wslPath . "`""
-            PositionTerminalWindow()
             return
         }
     }
     ; Run WSL Ubuntu normally
     Run "wt.exe -p `"" . wslConfigName . "`""
-    PositionTerminalWindow()
 }
 
 ; Convert Windows path to unix path
@@ -109,10 +104,18 @@ ConvertToWSLPath(windowsPath) {
     Run "cmd /c code"
 }
 
-PositionTerminalWindow() {
-    WinWait("ahk_exe WindowsTerminal.exe", , 3)
-    ; For my laptop 1920x1200 screen: x=300, y=100, width=1320, height=900 (slightly bigger)
-    ; TODO: Add device check
-    WinMove(200, 100, 1620, 1000, "ahk_exe WindowsTerminal.exe")
-    ; MsgBox "Repos fin", "dbg", 'OK'
+; Run SourceGit with Ctrl+Alt+G (opens at current File Explorer path if focused)
+^!g:: {
+    ; Check if File Explorer is the active window
+    if WinActive("ahk_class CabinetWClass") || WinActive("ahk_class ExploreWClass") {
+        ; Get the current path from File Explorer
+        currentPath := GetFileExplorerPath()
+        if (currentPath != "") {
+            Run 'cmd /c start /B sourcegit "' . currentPath . '"', , "Hide"
+            return
+        }
+    }
+    ; Run normally
+    Run "sourcegit"
 }
+
