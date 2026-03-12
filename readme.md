@@ -68,7 +68,7 @@ Right-click mouse gestures:
 - Small movement → Normal right-click
 
 ### **video_fastfoward.ahk**
-Media player speed control (PotPlayer, MPC-BE, MPC-HC):
+Media player speed control (PotPlayer, MPC-BE, MPC-HC(default)):
 - Right arrow (long press): Speed up (Bilibili-style)
 - Right arrow (short press): Normal seek
 - Speed settings configurable via tray menu GUI or config.ini
@@ -95,18 +95,11 @@ Use the build tools to automate common tasks:
 .\tool.ps1 compiler     # Launch Ahk2exe compiler
 ```
 
-**Bash:**
-```bash
-./tool.sh merge        # Merge all .ahk files into main.ahk
-./tool.sh startup      # Add main.ahk to Windows startup
-./tool.sh genconfig    # Generate config.ini template
-./tool.sh compiler     # Launch Ahk2exe compiler
-```
-
 ## Configuration
 Settings are read from `config.ini`:
 - WSL profile name for `launch_terminal.ahk`
 - Video playback speeds for `video_fastfoward.ahk`
+- Hotstring expansions for `hotstrings.ahk`
 
 ## Assets
 - `res/ahk_normal.icon` - Normal mode tray icon

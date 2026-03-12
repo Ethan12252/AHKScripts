@@ -59,4 +59,4 @@ Temporary Items
 config.ini
 .vscode/settings.json
 *.exe
-
+out/
