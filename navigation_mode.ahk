@@ -24,8 +24,8 @@ global CONFIG := {
     ],
     
     ICONS: {
-        NORMAL: "./res/ahk_normal.icon",
-        NAV: "./res/ahk_red.icon"
+        NORMAL: "./res/ahk_normal.ico",
+        NAV: "./res/ahk_red.ico"
     }
 }
 
@@ -68,6 +68,38 @@ ShowCommandTooltip(command, delay := 0) {
     }
 }
 
+ResolveIconPath(path) {
+    normalized := StrReplace(path, "/", "\\")
+    normalized := RegExReplace(normalized, "^\.\\")
+    candidates := [
+        A_ScriptDir "\\" normalized,
+        A_WorkingDir "\\" normalized,
+        normalized
+    ]
+
+    for candidate in candidates {
+        if (FileExist(candidate)) {
+            return candidate
+        }
+    }
+
+    return ""
+}
+
+SetModeTrayIcon(normalMode) {
+    iconPath := ResolveIconPath(normalMode ? CONFIG.ICONS.NORMAL : CONFIG.ICONS.NAV)
+
+    if (iconPath != "") {
+        try {
+            TraySetIcon(iconPath)
+            return
+        }
+    }
+
+    ; Fallback icons from shell32.dll avoid hard failure if custom file is invalid.
+    TraySetIcon("shell32.dll", normalMode ? 44 : 110)
+}
+
 ; ===== MODE MANAGEMENT =====
 SwitchMode(mode := "") {
     global normalMode, repeatCount, repeatBuffer, waitingForSecondD
@@ -85,8 +117,7 @@ SwitchMode(mode := "") {
     }
     
     ; Update tray icon
-    iconPath := normalMode ? CONFIG.ICONS.NORMAL : CONFIG.ICONS.NAV
-    TraySetIcon(iconPath)
+    SetModeTrayIcon(normalMode)
     
     ShowModeTooltip()
     
