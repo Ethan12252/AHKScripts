@@ -8,6 +8,9 @@ global waitingForSecondD := false
 global repeatBuffer := ""
 global repeatTimer := 0
 global waitingForReplace := false
+global navTriggerKeysDown := Map("CapsLock", false, "F13", false)
+global capsLockForceOffTimer := 0
+global ignoreNextCapsLockUp := false
 
 ; ===== CONFIG =====
 global CONFIG := {
@@ -130,6 +133,75 @@ SwitchMode(mode := "") {
     }
 }
 
+AnyNavigationTriggerDown() {
+    global navTriggerKeysDown
+    for key, isDown in navTriggerKeysDown {
+        if (isDown) {
+            return true
+        }
+    }
+    return false
+}
+
+SetCapsLockOff() {
+    try {
+        SetCapsLockState "Off"
+    }
+}
+
+SetCapsLockOffAgainSoon() {
+    global capsLockForceOffTimer
+    if (capsLockForceOffTimer) {
+        SetTimer capsLockForceOffTimer, 0
+    }
+
+    capsLockForceOffTimer := () => SetCapsLockOff()
+    SetTimer capsLockForceOffTimer, -150
+}
+
+ToggleCapsLockState() {
+    if GetKeyState("CapsLock", "T")
+        SetCapsLockState "Off"
+    else
+        SetCapsLockState "On"
+}
+
+EnterNavigationMode(triggerKey) {
+    global navTriggerKeysDown
+    if (navTriggerKeysDown[triggerKey]) {
+        return
+    }
+
+    navTriggerKeysDown[triggerKey] := true
+
+    if (triggerKey == "CapsLock") {
+        try {
+            SetCapsLockState "AlwaysOff"
+        }
+    }
+
+    SwitchMode("navigation")
+}
+
+ExitNavigationMode(triggerKey) {
+    global navTriggerKeysDown
+    wasDown := navTriggerKeysDown[triggerKey]
+    navTriggerKeysDown[triggerKey] := false
+
+    if (!wasDown) {
+        return
+    }
+
+    if (!AnyNavigationTriggerDown()) {
+        SwitchMode("normal")
+    }
+
+    if (triggerKey == "CapsLock") {
+        SetCapsLockOff()
+        SetCapsLockOffAgainSoon()
+    }
+}
+
 ; ===== REPEAT COUNT MANAGEMENT =====
 ProcessRepeatBuffer() {
     global repeatBuffer, repeatCount
@@ -196,22 +268,50 @@ HandleDCommand(secondKey, action, actionName) {
 }
 
 ; ===== CAPSLOCK REMAPPING =====
+SetCapsLockOff()
+
 ^+CapsLock:: {
-    if GetKeyState("CapsLock", "T")
-        SetCapsLockState "Off"
-    else
-        SetCapsLockState "On"
+    global ignoreNextCapsLockUp
+    ignoreNextCapsLockUp := true
+    ToggleCapsLockState()
 }
 
-CapsLock:: {
-    SwitchMode("navigation")
-    KeyWait("CapsLock")
-    SwitchMode("normal")
+*CapsLock:: {
+    global ignoreNextCapsLockUp
+    if (GetKeyState("Ctrl", "P") && GetKeyState("Shift", "P")) {
+        ignoreNextCapsLockUp := true
+        ToggleCapsLockState()
+        return
+    }
+
+    EnterNavigationMode("CapsLock")
+    return
+}
+
+*CapsLock Up:: {
+    global ignoreNextCapsLockUp
+    if (ignoreNextCapsLockUp) {
+        ignoreNextCapsLockUp := false
+        return
+    }
+
+    ExitNavigationMode("CapsLock")
+    return
+}
+
+*F13:: {
+    EnterNavigationMode("F13")
+    return
+}
+
+*F13 Up:: {
+    ExitNavigationMode("F13")
     return
 }
 
 ^CapsLock:: return
-+CapsLock:: return
+; Shift can appear transiently in some RDP/Android CapsLock events, so do not
+; define +CapsLock separately from the wildcard handler above.
 
 ; ===== NAVIGATION HOTKEYS =====
 #HotIf !normalMode

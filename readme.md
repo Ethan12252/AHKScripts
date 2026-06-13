@@ -11,10 +11,14 @@ Entry point that loads all other modules.
 Modal editing mode activated by holding **CapsLock**. Once activated, use letter keys for navigation and editing instead of arrow keys.
 
 **Quick Start:**
-- Hold **CapsLock** to enter navigation mode (tray icon changes to red)
+- Hold **CapsLock** or **F13** to enter navigation mode (tray icon changes to red)
 - Use ijkl and semicolon (;) for movement
 - Type a number before a command to repeat it (e.g., `5j` = move down 5 times)
-- Release **CapsLock** to exit back to normal mode
+- Release the trigger key to exit back to normal mode
+
+For RDP or Bluetooth keyboard setups where CapsLock toggle state is unreliable,
+remap the physical CapsLock key to **F13** and use F13 as the navigation-mode
+trigger. Local keyboards can continue using CapsLock.
 
 **Movement Layout:**
 ```
