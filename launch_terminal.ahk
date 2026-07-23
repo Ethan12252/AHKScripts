@@ -1,51 +1,45 @@
-﻿#Requires AutoHotkey v2.0-a
+#Requires AutoHotkey v2.0-a
 #SingleInstance Force
 
 /*
-    - Ctrl+Alt+T: Open default shell
-    - Ctrl+Alt+P: Open PowerShell  
-    - Ctrl+Alt+U: Open WSL profile 
-    - Ctrl+Alt+Y: Open VS Code
-    - Ctrl+Alt+G: Open SourceGit
-    - Will open at the File Explorer if focused.
-    
-    - WSL profile name is read from config.ini
+    - Ctrl+Alt+T: Windows Terminal default profile (pwsh 7 if that is WT default)
+    - Ctrl+Alt+P: MSYS2 (WT profile from config.ini)
+    - Ctrl+Alt+U: WSL (WT profile from config.ini)
+    - Ctrl+Alt+Y: VS Code
+    - Ctrl+Alt+G: SourceGit
+    - Opens at the File Explorer path when Explorer is focused.
+
+    Profiles (config.ini [LaunchTerminal]):
+      WslProfileName   e.g. archlinux
+      MsysProfileName  e.g. UCRT64 / MSYS2
 */
 
-; Run Windows Terminal with Ctrl+Alt+T (opens at current File Explorer path if focused)
+; Run Windows Terminal with Ctrl+Alt+T (default profile; opens at Explorer path if focused)
 ^!t:: {
-    ; Check if File Explorer is the active window
     if WinActive("ahk_class CabinetWClass") || WinActive("ahk_class ExploreWClass") {
-        ; Get the current path from File Explorer
-        ; Get path from address bar
         currentPath := GetFileExplorerPath()
         if (currentPath != "") {
             Run 'wt.exe -d "' currentPath '"'
             return
         }
     }
-    ; Run normally
     Run "wt.exe"
 }
 
-; Run Windows Terminal powershell with Ctrl+Alt+P (opens at current File Explorer path if focused)
+; Run MSYS2 profile with Ctrl+Alt+P
 ^!p:: {
-    ; Check if File Explorer is the active window
+    msysProfile := IniRead(".\config.ini", "LaunchTerminal", "MsysProfileName", "UCRT64 / MSYS2")
     if WinActive("ahk_class CabinetWClass") || WinActive("ahk_class ExploreWClass") {
-        ; Get the current path from File Explorer
-        ; Get path from address bar
         currentPath := GetFileExplorerPath()
         if (currentPath != "") {
-            Run "wt.exe -p `"" . "Windows PowerShell" . "`" -d `"" . currentPath . "`""
+            Run 'wt.exe -p "' msysProfile '" -d "' currentPath '"'
             return
         }
     }
-    ; Run normally
-    Run "wt.exe -p `"" . "Windows PowerShell" . "`""
+    Run 'wt.exe -p "' msysProfile '"'
 }
 
 GetFileExplorerPath() {
-    ; Get the active File Explorer window
     hwnd := WinGetID("A")
     for window in ComObject("Shell.Application").Windows {
         if (window.hwnd == hwnd) {
@@ -55,67 +49,51 @@ GetFileExplorerPath() {
     return ""
 }
 
-; Launch WSL Ubuntu with Ctrl+Alt+U
+; Launch WSL (profile name from config.ini)
 ^!u:: {
-    ; Get the wsl config name from the ini file
-    wslConfigName := IniRead(".\config.ini", "LaunchTerminal", "WslProfileName")
-    ; Check if File Explorer is the active window
+    wslConfigName := IniRead(".\config.ini", "LaunchTerminal", "WslProfileName", "archlinux")
     if WinActive("ahk_class CabinetWClass") || WinActive("ahk_class ExploreWClass") {
-        ; Get the current path from File Explorer
         currentPath := GetFileExplorerPath()
         if (currentPath != "") {
-            ; Convert Windows path to WSL path
             wslPath := ConvertToWSLPath(currentPath)
-            Run "wt.exe -p `"" . wslConfigName . "`" -d `"" . wslPath . "`""
+            Run 'wt.exe -p "' wslConfigName '" -d "' wslPath '"'
             return
         }
     }
-    ; Run WSL Ubuntu normally
-    Run "wt.exe -p `"" . wslConfigName . "`""
+    Run 'wt.exe -p "' wslConfigName '"'
 }
 
-; Convert Windows path to unix path
+; Convert Windows path to a WSL/Linux path under /mnt/<drive>
 ConvertToWSLPath(windowsPath) {
-    ; Replace drive letter (C:) with /mnt/c
     if (RegExMatch(windowsPath, "^([A-Za-z]):", &match)) {
         drive := StrLower(match[1])
         wslPath := "/mnt/" drive SubStr(windowsPath, 3)
-
         wslPath := StrReplace(wslPath, "\", "/")
         return wslPath
     }
     return windowsPath
 }
 
-; Run vscode with Ctrl+Alt+Y (opens at current File Explorer path if focused)
+; Run VS Code with Ctrl+Alt+Y (opens at Explorer path if focused)
 ^!y:: {
-    ; Check if File Explorer is the active window
     if WinActive("ahk_class CabinetWClass") || WinActive("ahk_class ExploreWClass") {
-        ; Get the current path from File Explorer
-        ; Get path from address bar
         currentPath := GetFileExplorerPath()
         if (currentPath != "") {
-            ; Run "cmd /c code `"" . currentPath . "`""
             Run 'cmd /c start /B code "' . currentPath . '"', , "Hide"
             return
         }
     }
-    ; Run normally
     Run "cmd /c code"
 }
 
-; Run SourceGit with Ctrl+Alt+G (opens at current File Explorer path if focused)
+; Run SourceGit with Ctrl+Alt+G (opens at Explorer path if focused)
 ^!g:: {
-    ; Check if File Explorer is the active window
     if WinActive("ahk_class CabinetWClass") || WinActive("ahk_class ExploreWClass") {
-        ; Get the current path from File Explorer
         currentPath := GetFileExplorerPath()
         if (currentPath != "") {
             Run 'cmd /c start /B sourcegit "' . currentPath . '"', , "Hide"
             return
         }
     }
-    ; Run normally
     Run "sourcegit"
 }
-

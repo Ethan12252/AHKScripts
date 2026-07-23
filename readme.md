@@ -31,7 +31,7 @@ trigger. Local keyboards can continue using CapsLock.
         └───┘└───┘└───┘└───┘└───┘
                ←    ↓    →
 ```
-- **h** = Line start  
+- **h** = Line start
 - **;** = Line end
 - **y** / **n**: Page up/Page down
 
@@ -54,10 +54,11 @@ Text expansion shortcuts:
 
 ### **launch_terminal.ahk**
 Quick terminal/editor launcher with path awareness:
-- **Ctrl+Alt+T**: Windows Terminal (MSYS2)
-- **Ctrl+Alt+P**: Windows PowerShell
-- **Ctrl+Alt+U**: WSL profile (configured in config.ini)
+- **Ctrl+Alt+T**: Windows Terminal default profile (e.g. PowerShell 7)
+- **Ctrl+Alt+P**: MSYS2 (WT profile from config.ini, default `UCRT64 / MSYS2`)
+- **Ctrl+Alt+U**: WSL (WT profile from config.ini, e.g. `archlinux`)
 - **Ctrl+Alt+Y**: VS Code
+- **Ctrl+Alt+G**: SourceGit
 - Auto-opens at current File Explorer path when available
 
 ### **chinese_text_toggle.ahk**
@@ -72,7 +73,7 @@ Right-click mouse gestures:
 - Small movement → Normal right-click
 
 ### **video_fastfoward.ahk**
-Media player speed control (PotPlayer, MPC-BE, MPC-HC(default)):
+Media player speed control (PotPlayer, MPC-BE(default); MPC-HC optional):
 - Right arrow (long press): Speed up (Bilibili-style)
 - Right arrow (short press): Normal seek
 - Speed settings configurable via tray menu GUI or config.ini
