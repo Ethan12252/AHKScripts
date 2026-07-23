@@ -7,9 +7,7 @@ global repeatCount := 1
 global waitingForSecondD := false
 global repeatBuffer := ""
 global repeatTimer := 0
-global waitingForReplace := false
 global navTriggerKeysDown := Map("CapsLock", false, "F13", false)
-global capsLockForceOffTimer := 0
 global ignoreNextCapsLockUp := false
 
 ; ===== CONFIG =====
@@ -124,8 +122,8 @@ SwitchMode(mode := "") {
     
     ShowModeTooltip()
     
-    ; Reset state when switching to normal mode
-    if (mode == "normal") {
+    ; Reset chord/repeat state whenever we are in normal mode
+    if (normalMode) {
         repeatCount := 1
         repeatBuffer := ""
         waitingForSecondD := false
@@ -143,20 +141,17 @@ AnyNavigationTriggerDown() {
     return false
 }
 
+ClearNavigationTriggers() {
+    global navTriggerKeysDown
+    for key, _ in navTriggerKeysDown {
+        navTriggerKeysDown[key] := false
+    }
+}
+
 SetCapsLockOff() {
     try {
         SetCapsLockState "Off"
     }
-}
-
-SetCapsLockOffAgainSoon() {
-    global capsLockForceOffTimer
-    if (capsLockForceOffTimer) {
-        SetTimer capsLockForceOffTimer, 0
-    }
-
-    capsLockForceOffTimer := () => SetCapsLockOff()
-    SetTimer capsLockForceOffTimer, -150
 }
 
 ToggleCapsLockState() {
@@ -198,7 +193,6 @@ ExitNavigationMode(triggerKey) {
 
     if (triggerKey == "CapsLock") {
         SetCapsLockOff()
-        SetCapsLockOffAgainSoon()
     }
 }
 
@@ -277,13 +271,7 @@ SetCapsLockOff()
 }
 
 *CapsLock:: {
-    global ignoreNextCapsLockUp
-    if (GetKeyState("Ctrl", "P") && GetKeyState("Shift", "P")) {
-        ignoreNextCapsLockUp := true
-        ToggleCapsLockState()
-        return
-    }
-
+    ; Ctrl+Shift+CapsLock is handled by the more specific ^+CapsLock hotkey.
     EnterNavigationMode("CapsLock")
     return
 }
@@ -316,7 +304,10 @@ SetCapsLockOff()
 ; ===== NAVIGATION HOTKEYS =====
 #HotIf !normalMode
     Esc:: {
+        ; Soft trigger map can stick if key-up is lost; force-clear on Esc.
+        ClearNavigationTriggers()
         SwitchMode("normal")
+        SetCapsLockOff()
         Send("{Esc}")
         return
     }
@@ -412,22 +403,11 @@ SetCapsLockOff()
         return
     }
     
-    ; === NAVIGATION KEYS WITH R COMMAND ===
-    
+    ; Select current character (not full vim-style replace-with-next-key)
     r:: {
-    global waitingForReplace
-    
-    if (waitingForReplace) {
+        Send "+{Right}"
+        ShowCommandTooltip("r")
         return
-    }
-    
-    waitingForReplace := true
-    
-    ; Select current character
-    Send "+{Right}"
-    ShowCommandTooltip("r")
-    waitingForReplace := false
-    return
     }
 
     ; === BASIC COMMANDS ===
