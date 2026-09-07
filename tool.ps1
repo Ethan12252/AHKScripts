@@ -51,6 +51,9 @@ school=
 [Name]
 fullname=
 
+[Student]
+id=
+
 [LaunchTerminal]
 WslProfileName="Ubuntu 20.04 (WSL)"
 

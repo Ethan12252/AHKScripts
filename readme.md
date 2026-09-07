@@ -51,6 +51,7 @@ Text expansion shortcuts:
 - `\mailr`  → your@email2.here
 - `\mailms` → your@email3.here
 - `\name` → Your Name Here
+- `\stn` → Your Student ID Here
 
 ### **launch_terminal.ahk**
 Quick terminal/editor launcher with path awareness:

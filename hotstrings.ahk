@@ -4,6 +4,7 @@
 mailE := Trim(IniRead("config.ini", "Email", "personal"))
 mailR := Trim(IniRead("config.ini", "Email", "work"))
 mailMS := Trim(IniRead("config.ini", "Email", "school"))
+studentId := Trim(IniRead("config.ini", "Student", "id"))
 
 ; Read name with proper UTF-8 handling
 FileObj := FileOpen("config.ini", "r", "UTF-8")
@@ -25,3 +26,6 @@ Hotstring("::\mailms", mailMS)
 
 ; Name
 Hotstring("::\name", nameData)
+
+; Student ID
+Hotstring("::\stn", studentId)
