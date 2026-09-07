@@ -74,16 +74,16 @@ ConvertToWSLPath(windowsPath) {
     return windowsPath
 }
 
-; Run VS Code with Ctrl+Alt+Y (opens at Explorer path if focused)
+; Run VSCodium with Ctrl+Alt+Y (opens at Explorer path if focused)
 ^!y:: {
     if WinActive("ahk_class CabinetWClass") || WinActive("ahk_class ExploreWClass") {
         currentPath := GetFileExplorerPath()
         if (currentPath != "") {
-            Run 'cmd /c start /B code "' . currentPath . '"', , "Hide"
+            Run 'cmd /c start /B codium "' . currentPath . '"', , "Hide"
             return
         }
     }
-    Run "cmd /c code"
+    Run "cmd /c codium"
 }
 
 ; Run SourceGit with Ctrl+Alt+G (opens at Explorer path if focused)
