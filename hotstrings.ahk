@@ -1,31 +1,39 @@
 #Requires AutoHotkey v2.0-a
 #SingleInstance Force
 
-mailE := Trim(IniRead("config.ini", "Email", "personal"))
-mailR := Trim(IniRead("config.ini", "Email", "work"))
-mailMS := Trim(IniRead("config.ini", "Email", "school"))
-studentId := Trim(IniRead("config.ini", "Student", "id"))
+; Hotstring expansions live in config.ini so a compiled exe works across
+; machines without recompiling — just edit the ini next to the exe and reload:
+;
+;   [Hotstrings]
+;   \maile=your@email1.here
+;
+; The key is the trigger body ("::" is prepended automatically), the value is
+; the expansion text. A missing section and blank values are skipped.
 
-; Read name with proper UTF-8 handling
-FileObj := FileOpen("config.ini", "r", "UTF-8")
-content := FileObj.Read()
-FileObj.Close()
+configPath := A_ScriptDir "\config.ini"
 
-nameData := ""
-loop Parse content, "`n", "`r" {
-    if (A_LoopField ~= "^\s*fullname\s*=") {
-        nameData := Trim(SubStr(A_LoopField, InStr(A_LoopField, "=") + 1))
-        break
+RegisterHotstringsFromIni(configPath, "Hotstrings")
+
+; Reads every key=value pair in an ini section and registers one hotstring
+; per entry. Never throws: a missing file, a missing section, or a bad line
+; is simply skipped.
+RegisterHotstringsFromIni(configPath, section) {
+    try {
+        raw := IniRead(configPath, section)
+    } catch {
+        return
+    }
+
+    loop Parse raw, "`n", "`r" {
+        line := Trim(A_LoopField)
+        if (line == "" || SubStr(line, 1, 1) == ";" || !InStr(line, "="))
+            continue
+        trigger := Trim(SubStr(line, 1, InStr(line, "=") - 1))
+        expansion := Trim(SubStr(line, InStr(line, "=") + 1))
+        if (trigger == "" || expansion == "")
+            continue
+        try {
+            Hotstring("::" trigger, expansion)
+        }
     }
 }
-
-; Email
-Hotstring("::\maile", mailE)
-Hotstring("::\mailr", mailR)
-Hotstring("::\mailms", mailMS)
-
-; Name
-Hotstring("::\name", nameData)
-
-; Student ID
-Hotstring("::\stn", studentId)

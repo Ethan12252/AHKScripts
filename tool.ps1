@@ -43,16 +43,12 @@ function Generate-Config {
 [global]
 device="msi_laptop"
 
-[Email]
-personal=
-work=
-school=
-
-[Name]
-fullname=
-
-[Student]
-id=
+[Hotstrings]
+\maile=your@email1.here
+\mailr=your@email2.here
+\mailms=your@email3.here
+\name=Your Name Here
+\stn=Your Student ID Here
 
 [LaunchTerminal]
 WslProfileName="Ubuntu 20.04 (WSL)"

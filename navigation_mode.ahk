@@ -25,8 +25,7 @@ global CONFIG := {
     ],
     
     ICONS: {
-        NORMAL: "./res/ahk_normal.ico",
-        NAV: "./res/ahk_red.ico"
+        NAV: "./res/ahk_nav_red.ico"
     }
 }
 
@@ -88,12 +87,19 @@ ResolveIconPath(path) {
 }
 
 SetModeTrayIcon(normalMode) {
-    iconPath := ResolveIconPath(normalMode ? CONFIG.ICONS.NORMAL : CONFIG.ICONS.NAV)
-
-    if (iconPath != "") {
+    if (normalMode) {
+        ; Default icon embedded in the interpreter (or the compiled exe itself).
         try {
-            TraySetIcon(iconPath)
+            TraySetIcon(A_AhkPath, 1)
             return
+        }
+    } else {
+        iconPath := ResolveIconPath(CONFIG.ICONS.NAV)
+        if (iconPath != "") {
+            try {
+                TraySetIcon(iconPath)
+                return
+            }
         }
     }
 
